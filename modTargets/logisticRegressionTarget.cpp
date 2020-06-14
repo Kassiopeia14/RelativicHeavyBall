@@ -137,30 +137,3 @@ std::vector<std::vector<double>> LogisticRegressionTarget::createPointsVector(st
 
 	return result;
 }
-
-void LogisticRegressionTarget::setPointsData(LogisticRegressionData& _data)
-{
-	const int negativePointCount = negativePoints_.size();
-	_data.negativePointCount = negativePointCount;
-	_data.negativePointXValues = new double[negativePointCount];
-	_data.negativePointYValues = new double[negativePointCount];
-
-	const int positivePointCount = positivePoints_.size();
-	_data.positivePointCount = positivePointCount;
-	_data.positivePointXValues = new double[positivePointCount];
-	_data.positivePointYValues = new double[positivePointCount];
-
-	int i = 0;
-	for (auto pointItem = negativePoints_.begin(); pointItem != negativePoints_.end(); pointItem++, i++)
-	{
-		_data.negativePointXValues[i] = (*pointItem)[1];
-		_data.negativePointYValues[i] = (*pointItem)[2];
-	}
-
-	i = 0;
-	for (auto pointItem = positivePoints_.begin(); pointItem != positivePoints_.end(); pointItem++, i++)
-	{
-		_data.positivePointXValues[i] = (*pointItem)[1];
-		_data.positivePointYValues[i] = (*pointItem)[2];
-	}
-}

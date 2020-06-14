@@ -37,7 +37,7 @@ int main()
 
 	LogisticRegressionTarget logisticRegressionTarget(negativePoints, positivePoints, 0.01);
 
-	HeavyBall<LogisticRegressionTarget> heavyBall(logisticRegressionTarget, 1000000, 0.00001, 0.1);
+	HeavyBall<LogisticRegressionTarget> heavyBall(logisticRegressionTarget, 10000, 0.00001, 0.1);
 	ConsoleOutput consoleOutput;
 
 	RungeKutta<HeavyBall<LogisticRegressionTarget>, ConsoleOutput> rungeKutta(heavyBall, consoleOutput, 0.1);

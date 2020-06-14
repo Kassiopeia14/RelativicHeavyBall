@@ -1,3 +1,5 @@
+#define MATHLIBRARY_EXPORTS
+
 #include "pythonDLL.h"
 
 PythonOutput::DataPoints dataPoints;
@@ -6,21 +8,21 @@ PythonMultyOutput::DataPoints multyDataPoints;
 
 LogisticRegressionData logisticRegressionData;
 
-double pythonNormTarget(double x, double y)
+MATHLIBRARY_API double pythonNormTarget(double x, double y)
 {
 	std::vector<double> coordinates = { x, y };
 
 	return NormTarget::target(coordinates);
 }
 
-double pythonWashtubTarget(double x, double y)
+MATHLIBRARY_API double pythonWashtubTarget(double x, double y)
 {
 	std::vector<double> coordinates = { x, y };
 
 	return WashtubTarget::target(coordinates);
 }
 
-double pythonQuadraticFormTarget(double x, double y)
+MATHLIBRARY_API double pythonQuadraticFormTarget(double x, double y)
 {
 	std::vector<double> coordinates = { x, y };
 
@@ -33,7 +35,7 @@ double pythonQuadraticFormTarget(double x, double y)
 	return quadraticForm.target(coordinates);
 }
 
-double logisticRegressionTarget(double x, double y)
+MATHLIBRARY_API double logisticRegressionTarget(double x, double y)
 {
 	std::vector<double> coordinates = { 0, x, y };
 
@@ -58,12 +60,12 @@ double logisticRegressionTarget(double x, double y)
 	return logisticRegressionTarget.target(coordinates);
 }
 
-LogisticRegressionData* getLogisticRegressionData()
+MATHLIBRARY_API LogisticRegressionData* getLogisticRegressionData()
 {
 	return &logisticRegressionData;
 }
 
-PythonOutput::DataPoints* returnResult(double xStart, double yStart, double xVelocityStart, double yVelocityStart, int stepLimit, double accuracy, double a, double h, double c)
+MATHLIBRARY_API PythonOutput::DataPoints* returnResult(double xStart, double yStart, double xVelocityStart, double yVelocityStart, int stepLimit, double accuracy, double a, double h, double c)
 {
 	PythonOutput pythonOutput(dataPoints);
 
@@ -82,7 +84,7 @@ PythonOutput::DataPoints* returnResult(double xStart, double yStart, double xVel
 	return &dataPoints;
 }
 
-PythonMultyOutput::DataPoints* normMulty(double xStart, double yStart, double xVelocityStart, double yVelocityStart, int stepLimit, double accuracy, double a, double h, double c, double aGD)
+MATHLIBRARY_API PythonMultyOutput::DataPoints* normMulty(double xStart, double yStart, double xVelocityStart, double yVelocityStart, int stepLimit, double accuracy, double a, double h, double c, double aGD)
 {
 	PythonMultyOutput pythonMultyOutput(multyDataPoints, 4);
 
@@ -114,7 +116,7 @@ PythonMultyOutput::DataPoints* normMulty(double xStart, double yStart, double xV
 	return &multyDataPoints;
 }
 
-PythonMultyOutput::DataPoints* washtubMulty(double xStart, double yStart, double xVelocityStart, double yVelocityStart, int stepLimit, double accuracy, double a, double h, double c, double aGD)
+MATHLIBRARY_API PythonMultyOutput::DataPoints* washtubMulty(double xStart, double yStart, double xVelocityStart, double yVelocityStart, int stepLimit, double accuracy, double a, double h, double c, double aGD)
 {
 	PythonMultyOutput pythonMultyOutput(multyDataPoints, 4);
 
@@ -146,7 +148,7 @@ PythonMultyOutput::DataPoints* washtubMulty(double xStart, double yStart, double
 	return &multyDataPoints;
 }
 
-PythonMultyOutput::DataPoints* quadraticFormMulty(double xStart, double yStart, double xVelocityStart, double yVelocityStart, int stepLimit, double accuracy, double a, double h, double c, double aGD)
+MATHLIBRARY_API PythonMultyOutput::DataPoints* quadraticFormMulty(double xStart, double yStart, double xVelocityStart, double yVelocityStart, int stepLimit, double accuracy, double a, double h, double c, double aGD)
 {
 	PythonMultyOutput pythonMultyOutput(multyDataPoints, 4);
 
@@ -182,7 +184,7 @@ PythonMultyOutput::DataPoints* quadraticFormMulty(double xStart, double yStart, 
 	return &multyDataPoints;
 }
 
-PythonMultyOutput::DataPoints* logisticRegressionDiagonalMulty(double xStart, double yStart, double xVelocityStart, double yVelocityStart, int stepLimit, double accuracy, double a, double h, double c)
+MATHLIBRARY_API PythonMultyOutput::DataPoints* logisticRegressionDiagonalMulty(double xStart, double yStart, double xVelocityStart, double yVelocityStart, int stepLimit, double accuracy, double a, double h, double c)
 {
 	const int methodCount = 4;
 	PythonMultyOutput pythonMultyOutput(multyDataPoints, methodCount);
@@ -225,13 +227,14 @@ PythonMultyOutput::DataPoints* logisticRegressionDiagonalMulty(double xStart, do
 	positivePoints.push_back({ 6.0, 1.0 });
 	positivePoints.push_back({ 7.0, 0.0 });
 	
-	LogisticRegressionTarget logisticRegressionTarget(negativePoints, positivePoints, 0.01);
-
-	logisticRegressionTarget.setPointsData(logisticRegressionData);
+	LogisticRegressionClassifier logisticRegressionClassifier(negativePoints, positivePoints);
+	logisticRegressionClassifier.setPointsData(logisticRegressionData);
 	logisticRegressionData.lineCount = methodCount;
 	logisticRegressionData.lineAParameters = new double[methodCount];
 	logisticRegressionData.lineBParameters = new double[methodCount];
 	logisticRegressionData.lineCParameters = new double[methodCount];
+
+	LogisticRegressionTarget logisticRegressionTarget(negativePoints, positivePoints, 0.01);
 
 	std::vector<double> initialData{ 0, xStart, yStart, 0, xVelocityStart, yVelocityStart };
 
@@ -273,7 +276,7 @@ PythonMultyOutput::DataPoints* logisticRegressionDiagonalMulty(double xStart, do
 
 }
 
-PythonMultyOutput::DataPoints* logisticRegression1WrongMulty(double xStart, double yStart, double xVelocityStart, double yVelocityStart, int stepLimit, double accuracy, double a, double h, double c, double aGD)
+MATHLIBRARY_API PythonMultyOutput::DataPoints* logisticRegression1WrongMulty(double xStart, double yStart, double xVelocityStart, double yVelocityStart, int stepLimit, double accuracy, double a, double h, double c, double aGD)
 {
 	const int methodCount = 4;
 	PythonMultyOutput pythonMultyOutput(multyDataPoints, methodCount);
@@ -294,13 +297,14 @@ PythonMultyOutput::DataPoints* logisticRegression1WrongMulty(double xStart, doub
 	positivePoints.push_back({ 3.0, 1.0 });
 	positivePoints.push_back({ 4.0, 0.0 });
 
-	LogisticRegressionTarget logisticRegressionTarget(negativePoints, positivePoints, 0.01);
-
-	logisticRegressionTarget.setPointsData(logisticRegressionData);
+	LogisticRegressionClassifier logisticRegressionClassifier(negativePoints, positivePoints);
+	logisticRegressionClassifier.setPointsData(logisticRegressionData);
 	logisticRegressionData.lineCount = methodCount;
 	logisticRegressionData.lineAParameters = new double[methodCount];
 	logisticRegressionData.lineBParameters = new double[methodCount];
 	logisticRegressionData.lineCParameters = new double[methodCount];
+
+	LogisticRegressionTarget logisticRegressionTarget(negativePoints, positivePoints, 0.01);
 
 	std::vector<double> initialData{ 0, xStart, yStart, 0, xVelocityStart, yVelocityStart };
 
@@ -342,7 +346,7 @@ PythonMultyOutput::DataPoints* logisticRegression1WrongMulty(double xStart, doub
 
 }
 
-PythonMultyOutput::DataPoints* logisticRegressionMulty(double xStart, double yStart, double xVelocityStart, double yVelocityStart, int stepLimit, double accuracy, double a, double h, double c, double aGD)
+MATHLIBRARY_API PythonMultyOutput::DataPoints* logisticRegressionMulty(double xStart, double yStart, double xVelocityStart, double yVelocityStart, int stepLimit, double accuracy, double a, double h, double c, double aGD)
 {
 	const int methodCount = 4;
 	PythonMultyOutput pythonMultyOutput(multyDataPoints, methodCount);
@@ -385,13 +389,14 @@ PythonMultyOutput::DataPoints* logisticRegressionMulty(double xStart, double ySt
 	positivePoints.push_back({ 6.0, 1.0 });
 	positivePoints.push_back({ 7.0, 0.0 });
 
-	LogisticRegressionTarget logisticRegressionTarget(negativePoints, positivePoints, 0.01);
-
-	logisticRegressionTarget.setPointsData(logisticRegressionData);
+	LogisticRegressionClassifier logisticRegressionClassifier(negativePoints, positivePoints);
+	logisticRegressionClassifier.setPointsData(logisticRegressionData);
 	logisticRegressionData.lineCount = methodCount;
 	logisticRegressionData.lineAParameters = new double[methodCount];
 	logisticRegressionData.lineBParameters = new double[methodCount];
 	logisticRegressionData.lineCParameters = new double[methodCount];
+
+	LogisticRegressionTarget logisticRegressionTarget(negativePoints, positivePoints, 0.01);
 
 	std::vector<double> initialData{ 0, xStart, yStart, 0, xVelocityStart, yVelocityStart };
 
@@ -438,7 +443,7 @@ double rand(double b, double e)
 	return b + (rand() % static_cast<unsigned int>((e - b) * 1000)) / 1000.;
 }
 
-PythonMultyOutput::DataPoints* logisticRegressionGalaxiesMulty(double xStart, double yStart, double xVelocityStart, double yVelocityStart, int stepLimit, double accuracy, double a, double h, double c, double aGD)
+MATHLIBRARY_API PythonMultyOutput::DataPoints* logisticRegressionGalaxiesMulty(double xStart, double yStart, double xVelocityStart, double yVelocityStart, int stepLimit, double accuracy, double a, double h, double c, double aGD)
 {
 	const int methodCount = 4;
 	PythonMultyOutput pythonMultyOutput(multyDataPoints, methodCount);
@@ -495,13 +500,14 @@ PythonMultyOutput::DataPoints* logisticRegressionGalaxiesMulty(double xStart, do
 	positivePoints.push_back({ rand(4, 10), rand(-75, 75) });
 	positivePoints.push_back({ rand(5, 10), rand(-75, 75) });
 
-	LogisticRegressionTarget logisticRegressionTarget(negativePoints, positivePoints, 0.01);
-
-	logisticRegressionTarget.setPointsData(logisticRegressionData);
+	LogisticRegressionClassifier logisticRegressionClassifier(negativePoints, positivePoints);
+	logisticRegressionClassifier.setPointsData(logisticRegressionData);
 	logisticRegressionData.lineCount = methodCount;
 	logisticRegressionData.lineAParameters = new double[methodCount];
 	logisticRegressionData.lineBParameters = new double[methodCount];
 	logisticRegressionData.lineCParameters = new double[methodCount];
+
+	LogisticRegressionTarget logisticRegressionTarget(negativePoints, positivePoints, 0.01);
 
 	std::vector<double> initialData{ 0, xStart, yStart, 0, xVelocityStart, yVelocityStart };
 

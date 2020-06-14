@@ -3,6 +3,7 @@
 #include "../modOutput/pythonOutput.h"
 #include "../modOutput/pythonMultyOutput.h"
 #include "../modTargets/logisticRegressionTarget.h"
+#include "../modLogisticRegression/logisticRegressionClassifier.h"
 
 using namespace std;
 
@@ -98,7 +99,34 @@ void testLogisticRegressionMultyPythonDLL()
     else cout << "error load Dll" << endl;
 }
 
+typedef PythonMultyOutput::DataPoints* (*LogisticRegressionGalaxiesMultyFunction)(double xStart, double yStart, double vXStart, double vYStart, int stepLimit, double accuracy, double a, double h, double c);
+typedef LogisticRegressionData* (*GetLogisticRegressionDataFunction)();
+
+void testLogisticRegressionGalaxiesMultyPythonDLL()
+{
+    HINSTANCE hModule = NULL;
+    hModule = ::LoadLibrary(L"testPythonDLL.dll");
+    if (hModule != NULL)
+    {
+        LogisticRegressionGalaxiesMultyFunction logisticRegressionMultyFunction = (LogisticRegressionGalaxiesMultyFunction)GetProcAddress(hModule, "logisticRegressionGalaxiesMulty");
+        GetLogisticRegressionDataFunction getLogisticRegressionDataFunction = (GetLogisticRegressionDataFunction)GetProcAddress(hModule, "getLogisticRegressionData");
+
+        PythonMultyOutput::DataPoints* dataPoints = (*logisticRegressionMultyFunction)(4, 3, 0, 0, 1000, 0.0001, 0.1, 0.1, 20);
+
+        for (int i = 0; i < dataPoints->pointCounts[0]; i++)
+        {
+            std::cout << i << ": " << dataPoints->xValues[i] << ", " << dataPoints->yValues[i] << " " << dataPoints->zValues[i] << std::endl;
+        }
+
+        LogisticRegressionData* logisticRegressionData = (*getLogisticRegressionDataFunction)();
+
+        ::FreeLibrary(hModule);
+    }
+    else cout << "error load Dll" << endl;
+}
+
+
 void main()
 {
-    testLogisticRegressionMultyPythonDLL();
+    testLogisticRegressionGalaxiesMultyPythonDLL();
 }

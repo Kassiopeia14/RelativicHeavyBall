@@ -12,6 +12,7 @@
 #include "../modTargets/washtubTarget.h"
 #include "../modTargets/quadraticForm.h"
 #include "../modTargets/logisticRegressionTarget.h"
+#include "../modLogisticRegression/logisticRegressionClassifier.h"
 #include <cstdlib>
 
 #ifdef MATHLIBRARY_EXPORTS
