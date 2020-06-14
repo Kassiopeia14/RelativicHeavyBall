@@ -11,11 +11,11 @@ public:
 	GradientDescent(
 		Target& _target,
 		const size_t _stepLimit,
-		const double _normAccuracy,
+		const double _targetAccuracy,
 		const double _stepSize) :
 		target_(_target),
 		stepLimit_(_stepLimit),
-		normAccuracy_(_normAccuracy),
+		targetAccuracy_(_targetAccuracy),
 		stepSize_(_stepSize)
 	{
 	}
@@ -80,9 +80,9 @@ public:
 
 		std::vector<double>	coordinates(_newData.begin(), _newData.begin() + dimension);
 
-		const double coordinatesNorm = norm(coordinates);
+		const double targetValue = target_.target(coordinates);
 
-		return (coordinatesNorm < normAccuracy_);
+		return (targetValue < targetAccuracy_);
 	}
 
 private:
@@ -90,7 +90,7 @@ private:
 
 	const size_t stepLimit_;
 
-	const double normAccuracy_;
+	const double targetAccuracy_;
 
 	const double stepSize_;
 };

@@ -6,10 +6,10 @@
 int main()
 {
 	NormTarget normTarget;
-	HeavyBall<NormTarget> heavyBall(normTarget, 10000, 0.0001, 0.1);
+	HeavyBall<NormTarget> heavyBall(normTarget, 10000, 0.0001, 10, true);
 	ConsoleOutput consoleOutput;
 
-	RungeKutta<HeavyBall<NormTarget>, ConsoleOutput> rungeKutta(heavyBall, consoleOutput, 0.1);
+	RungeKutta<HeavyBall<NormTarget>, ConsoleOutput> rungeKutta(heavyBall, consoleOutput, 0.01);
 
 	std::vector<double> initialData{ 1, 1, 0, 0 };
 

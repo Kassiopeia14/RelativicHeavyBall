@@ -1,17 +1,27 @@
 #include "logisticRegressionTarget.h"
 
-LogisticRegressionTarget::LogisticRegressionTarget(
-	std::list<std::vector<double>> _negativePoints,
-	std::list<std::vector<double>> _positivePoints,
-	const double _regularization):
-	regularization_(_regularization),
-	negativePoints_(createPointsVector(_negativePoints)),
-	positivePoints_(createPointsVector(_positivePoints))
+LogisticRegressionTarget::LogisticRegressionTarget():
+	negativePoints_(),
+	positivePoints_(),
+	regularization_(0)
 {
 }
 
 LogisticRegressionTarget::~LogisticRegressionTarget()
 {
+}
+
+void LogisticRegressionTarget::setPoints(
+	std::list<std::vector<double>> _negativePoints,
+	std::list<std::vector<double>> _positivePoints)
+{
+	addPoints(negativePoints_, _negativePoints);
+	addPoints(positivePoints_, _positivePoints);
+}
+
+void LogisticRegressionTarget::setRegularization(const double _regularization)
+{
+	regularization_ = _regularization;
 }
 
 double LogisticRegressionTarget::target(std::vector<double> _coordinates)
@@ -108,23 +118,17 @@ Matrix LogisticRegressionTarget::gessian(std::vector<double> _coordinates)
 	return result;
 }
 
-std::vector<std::vector<double>> LogisticRegressionTarget::createPointsVector(std::list<std::vector<double>> _points)
+void LogisticRegressionTarget::addPoints(
+	std::list<std::vector<double>> &_destination, 
+	std::list<std::vector<double>> _points)
 {
 	const size_t pointDimention = _points.begin()->size();
-
-	std::vector<size_t> pointDimentions(_points.size());
-
-	for (auto dimentionItem = pointDimentions.begin(); dimentionItem != pointDimentions.end(); dimentionItem++)
+		
+	for (auto sourcePointItem = _points.begin(); sourcePointItem != _points.end(); sourcePointItem++)
 	{
-		*dimentionItem = pointDimention + 1;
-	}
+		std::vector<double> newPoint(pointDimention + 1);
 
-	std::vector<std::vector<double>> result(pointDimentions.begin(), pointDimentions.end());
-
-	auto pointItem = result.begin();
-	for (auto sourcePointItem = _points.begin(); sourcePointItem != _points.end(); pointItem++, sourcePointItem++)
-	{
-		auto coordinateItem = pointItem->begin();
+		auto coordinateItem = newPoint.begin();
 
 		*coordinateItem = -1;
 		coordinateItem++;
@@ -133,7 +137,34 @@ std::vector<std::vector<double>> LogisticRegressionTarget::createPointsVector(st
 		{
 			*coordinateItem = *sourceCoordinateItem;
 		}
+
+		_destination.push_back(newPoint);
+	}
+}
+
+void LogisticRegressionTarget::setPointsData(LogisticRegressionData& _data)
+{
+	const int negativePointCount = negativePoints_.size();
+	_data.negativePointCount = negativePointCount;
+	_data.negativePointXValues = new double[negativePointCount];
+	_data.negativePointYValues = new double[negativePointCount];
+
+	const int positivePointCount = positivePoints_.size();
+	_data.positivePointCount = positivePointCount;
+	_data.positivePointXValues = new double[positivePointCount];
+	_data.positivePointYValues = new double[positivePointCount];
+
+	int i = 0;
+	for (auto pointItem = negativePoints_.begin(); pointItem != negativePoints_.end(); pointItem++, i++)
+	{
+		_data.negativePointXValues[i] = (*pointItem)[1];
+		_data.negativePointYValues[i] = (*pointItem)[2];
 	}
 
-	return result;
+	i = 0;
+	for (auto pointItem = positivePoints_.begin(); pointItem != positivePoints_.end(); pointItem++, i++)
+	{
+		_data.positivePointXValues[i] = (*pointItem)[1];
+		_data.positivePointYValues[i] = (*pointItem)[2];
+	}
 }

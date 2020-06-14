@@ -35,14 +35,14 @@ int main()
 	positivePoints.push_back({ 4.0, 0.0 });
 
 
-	LogisticRegressionTarget logisticRegressionTarget(negativePoints, positivePoints, 0.01);
+	LogisticRegressionTarget logisticRegressionTarget;
+	logisticRegressionTarget.setPoints(negativePoints, positivePoints);
+	logisticRegressionTarget.setRegularization(0.01);
 
-	HeavyBall<LogisticRegressionTarget> heavyBall(logisticRegressionTarget, 10000, 0.00001, 0.1);
+	HeavyBall<LogisticRegressionTarget> heavyBall(logisticRegressionTarget, 10000, 0.0001, 10, true);
 	ConsoleOutput consoleOutput;
 
 	RungeKutta<HeavyBall<LogisticRegressionTarget>, ConsoleOutput> rungeKutta(heavyBall, consoleOutput, 0.1);
-
-	//std::vector<double> initialData{0, 0, 0, 0, 0, 0 };
 
 	std::vector<double> initialData{ 0.0, 0.0, 0.0, 0, 0, 0 };
 

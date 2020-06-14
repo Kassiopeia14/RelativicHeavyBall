@@ -5,12 +5,12 @@
 #include "../modMatrix/matrix.h"
 
 template<class Target>
-class HeavyBall
+class FastGradientDescent
 {
 public:
 
-	HeavyBall(
-		Target &_target,
+	FastGradientDescent(
+		Target& _target,
 		const size_t _stepLimit,
 		const double _targetAccuracy,
 		const double _param,
@@ -23,7 +23,7 @@ public:
 	{
 	}
 
-	~HeavyBall()
+	~FastGradientDescent()
 	{
 	}
 
@@ -56,32 +56,32 @@ public:
 			gradient(targetGradient(coordinates)),
 			result(_data.size());
 
-		double stepSize = 1;
-		
+		double stepSize = param_;
+
 		if (useHessian_)
 		{
 			Matrix targetGessian = target_.gessian(coordinates);
 
 			std::vector<double> transformedGradient = targetGessian * gradient;
 
-			const double
+			const double 
 				dotProduct = transformedGradient * gradient,
 				gradientNorm = norm(gradient);
-
+			
 			stepSize = gradientNorm * gradientNorm / dotProduct;
 		}
-		
-		auto resultItem = result.begin();
-		for (auto velocityItem = velocities.begin(); velocityItem != velocities.end(); velocityItem++, resultItem++)
-		{
-			*resultItem = *velocityItem;
-		}
 
+		auto resultItem = result.begin();
 		auto gradientItem = gradient.begin();
 
-		for (auto velocityItem = velocities.begin(); velocityItem != velocities.end(); velocityItem++, gradientItem++, resultItem++)
+		for (auto coordinatesItem = coordinates.begin(); coordinatesItem != coordinates.end(); coordinatesItem++, gradientItem++, resultItem++)
 		{
-			*resultItem = param_ * (- *velocityItem - stepSize * *gradientItem);
+			*resultItem -= stepSize * *gradientItem;
+		}
+
+		for (auto velocityItem = velocities.begin(); velocityItem != velocities.end(); velocityItem++, resultItem++)
+		{
+			*resultItem = 0;
 		}
 
 		return result;
@@ -104,7 +104,6 @@ public:
 	}
 
 private:
-
 	Target& target_;
 
 	const size_t stepLimit_;

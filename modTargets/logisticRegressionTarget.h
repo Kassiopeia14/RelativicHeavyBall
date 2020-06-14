@@ -4,15 +4,34 @@
 #include <list>
 #include "../modMatrix/matrix.h"
 
+struct LogisticRegressionData
+{
+	int negativePointCount;
+	double* negativePointXValues;
+	double* negativePointYValues;
+
+	int positivePointCount;
+	double* positivePointXValues;
+	double* positivePointYValues;
+
+	int lineCount;
+	double* lineAParameters;
+	double* lineBParameters;
+	double* lineCParameters;
+};
+
 class LogisticRegressionTarget
 {	
 public:
 
-	LogisticRegressionTarget(
-		std::list<std::vector<double>> _negativePoints,
-		std::list<std::vector<double>> _positivePoints,
-		const double _regularization);
+	LogisticRegressionTarget();
 	~LogisticRegressionTarget();
+	
+	void setPoints(
+		std::list<std::vector<double>> _negativePoints,
+		std::list<std::vector<double>> _positivePoints);
+
+	void setRegularization(const double _regularization);
 
 	double target(std::vector<double> _coordinates);
 
@@ -20,14 +39,18 @@ public:
 
 	Matrix gessian(std::vector<double> _coordinates);
 
+	void setPointsData(LogisticRegressionData& _data);
+
 private:
 
-	const double regularization_;
+	double regularization_;
 
-	std::vector<std::vector<double>> 
+	std::list<std::vector<double>> 
 		negativePoints_,
 		positivePoints_;
 
-	static std::vector<std::vector<double>> createPointsVector(std::list<std::vector<double>> _points);
+	static void addPoints(
+		std::list<std::vector<double>>& _destination,
+		std::list<std::vector<double>> _points);
 
 };

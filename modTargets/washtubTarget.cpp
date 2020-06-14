@@ -4,13 +4,11 @@ double WashtubTarget::target(std::vector<double> _coordinates)
 {
 	double result = 0;
 
-	result = _coordinates[0] * _coordinates[0] * _coordinates[0] * _coordinates[0] + 10 * _coordinates[1] * _coordinates[1] * _coordinates[1] * _coordinates[1];
-	/*
 	for (auto coordinateItem = _coordinates.begin(); coordinateItem != _coordinates.end(); coordinateItem++)
 	{
 		result += *coordinateItem * *coordinateItem * *coordinateItem * *coordinateItem;
 	}
-	*/
+
 	return result;
 }
 
@@ -18,16 +16,13 @@ std::vector<double> WashtubTarget::gradient(std::vector<double> _coordinates)
 {
 	std::vector<double> result(_coordinates.size());
 
-	result[0] = _coordinates[0] * _coordinates[0] * _coordinates[0];
-	result[1] = 40 * _coordinates[1] * _coordinates[1] * _coordinates[1];
-	/*
 	auto coordinateItem = _coordinates.begin();
 
 	for (auto resultItem = result.begin(); resultItem != result.end(); resultItem++, coordinateItem++)
 	{
 		*resultItem = 4 * *coordinateItem * *coordinateItem * *coordinateItem;
 	}
-	*/
+
 	return result;
 }
 
