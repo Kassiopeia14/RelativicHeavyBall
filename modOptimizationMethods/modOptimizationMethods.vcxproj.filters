@@ -27,9 +27,6 @@
     <ClInclude Include="relativicHeavyBall.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="gradientDescent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="fastGradientDescent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
