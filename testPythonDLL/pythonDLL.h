@@ -41,7 +41,8 @@ extern "C" MATHLIBRARY_API PythonOutput::DataPoints * returnResult(
 	const double _targetAccuracy,
 	const double _param,
 	const double _lightSpeed,
-	const bool _useHessian,
+	bool _useGradientHessian,
+	bool _useHavyBallHessian,
 	const double _h);
 
 extern "C" MATHLIBRARY_API PythonMultyOutput::DataPoints * normMulty(
@@ -53,7 +54,8 @@ extern "C" MATHLIBRARY_API PythonMultyOutput::DataPoints * normMulty(
 	const double _targetAccuracy,
 	const double _param,
 	const double _lightSpeed,
-	const bool _useHessian,
+	bool _useGradientHessian,
+	bool _useHavyBallHessian,
 	const double _h);
 
 extern "C" MATHLIBRARY_API PythonMultyOutput::DataPoints * washtubMulty(
@@ -65,7 +67,8 @@ extern "C" MATHLIBRARY_API PythonMultyOutput::DataPoints * washtubMulty(
 	const double _targetAccuracy,
 	const double _param,
 	const double _lightSpeed,
-	const bool _useHessian,
+	bool _useGradientHessian,
+	bool _useHavyBallHessian,
 	const double _h);
 
 extern "C" MATHLIBRARY_API PythonMultyOutput::DataPoints * quadraticFormMulty(
@@ -77,7 +80,8 @@ extern "C" MATHLIBRARY_API PythonMultyOutput::DataPoints * quadraticFormMulty(
 	const double _targetAccuracy,
 	const double _param,
 	const double _lightSpeed,
-	const bool _useHessian,
+	bool _useGradientHessian,
+	bool _useHavyBallHessian,
 	const double _h);
 
 extern "C" MATHLIBRARY_API PythonMultyOutput::DataPoints * logisticRegressionMulty(
@@ -89,5 +93,6 @@ extern "C" MATHLIBRARY_API PythonMultyOutput::DataPoints * logisticRegressionMul
 	const double _targetAccuracy,
 	const double _param,
 	const double _lightSpeed,
-	const bool _useHessian,
+	bool _useGradientHessian,
+	bool _useHavyBallHessian,
 	const double _h);

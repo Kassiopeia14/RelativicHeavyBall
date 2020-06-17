@@ -89,7 +89,8 @@ MATHLIBRARY_API PythonOutput::DataPoints* returnResult(
 	const double _targetAccuracy,
 	const double _param,
 	const double _lightSpeed,
-	const bool _useHessian,
+	const bool _useGradientHessian,
+	const bool _useHavyBallHessian,
 	const double _h)
 {
 	lrTarget.setRegularization(0.01);
@@ -98,7 +99,7 @@ MATHLIBRARY_API PythonOutput::DataPoints* returnResult(
 
 	WashtubTarget washtubTarget;
 
-	HeavyBall<WashtubTarget> heavyBall(washtubTarget, _stepLimit, _targetAccuracy, _param, _useHessian);
+	HeavyBall<WashtubTarget> heavyBall(washtubTarget, _stepLimit, _targetAccuracy, _param, _useHavyBallHessian);
 
 	RungeKutta<HeavyBall<WashtubTarget>, PythonOutput> rungeKutta(heavyBall, pythonOutput, _h);
 
@@ -120,7 +121,8 @@ PythonMultyOutput::DataPoints* normMulty(
 	const double _targetAccuracy,
 	const double _param,
 	const double _lightSpeed,
-	const bool _useHessian,
+	const bool _useGradientHessian,
+	const bool _useHavyBallHessian,
 	const double _h)
 {
 	PythonMultyOutput pythonMultyOutput(multyDataPoints, 4);
@@ -129,22 +131,22 @@ PythonMultyOutput::DataPoints* normMulty(
 	std::vector<double> initialData{ _xStart, _yStart, _xSpeedStart, _ySpeedStart };
 
 	pythonMultyOutput.setCurrentLine(0);
-	FastGradientDescent<NormTarget> fastGradientDescent(normTarget, _stepLimit, _targetAccuracy, _param, _useHessian);
+	FastGradientDescent<NormTarget> fastGradientDescent(normTarget, _stepLimit, _targetAccuracy, _param, _useGradientHessian);
 	RungeKutta<FastGradientDescent<NormTarget>, PythonMultyOutput> rungeKutta0(fastGradientDescent, pythonMultyOutput, _h);
 	rungeKutta0.solve(initialData);
 
 	pythonMultyOutput.setCurrentLine(1);
-	HeavyBall<NormTarget> heavyBall(normTarget, _stepLimit, _targetAccuracy, _param, _useHessian);
+	HeavyBall<NormTarget> heavyBall(normTarget, _stepLimit, _targetAccuracy, _param, _useHavyBallHessian);
 	RungeKutta<HeavyBall<NormTarget>, PythonMultyOutput> rungeKutta1(heavyBall, pythonMultyOutput, _h);
 	rungeKutta1.solve(initialData);
 
 	pythonMultyOutput.setCurrentLine(2);
-	RelativicHeavyBall<NormTarget> relativicHeavyBall(normTarget, _stepLimit, _targetAccuracy, _param, _lightSpeed, _useHessian);
+	RelativicHeavyBall<NormTarget> relativicHeavyBall(normTarget, _stepLimit, _targetAccuracy, _param, _lightSpeed, _useHavyBallHessian);
 	RungeKutta<RelativicHeavyBall<NormTarget>, PythonMultyOutput> rungeKutta2(relativicHeavyBall, pythonMultyOutput, _h);
 	rungeKutta2.solve(initialData);
 
 	pythonMultyOutput.setCurrentLine(3);
-	PseudoRelativicHeavyBall<NormTarget> pseudoRelativicHeavyBall(normTarget, _stepLimit, _targetAccuracy, _param, _lightSpeed, _useHessian);
+	PseudoRelativicHeavyBall<NormTarget> pseudoRelativicHeavyBall(normTarget, _stepLimit, _targetAccuracy, _param, _lightSpeed, _useHavyBallHessian);
 	RungeKutta<PseudoRelativicHeavyBall<NormTarget>, PythonMultyOutput> rungeKutta3(pseudoRelativicHeavyBall, pythonMultyOutput, _h);
 	rungeKutta3.solve(initialData);
 
@@ -162,7 +164,8 @@ PythonMultyOutput::DataPoints* washtubMulty(
 	const double _targetAccuracy,
 	const double _param,
 	const double _lightSpeed,
-	const bool _useHessian,
+	const bool _useGradientHessian,
+	const bool _useHavyBallHessian,
 	const double _h)
 {
 	PythonMultyOutput pythonMultyOutput(multyDataPoints, 4);
@@ -171,22 +174,22 @@ PythonMultyOutput::DataPoints* washtubMulty(
 	std::vector<double> initialData{ _xStart, _yStart, _xSpeedStart, _ySpeedStart };
 
 	pythonMultyOutput.setCurrentLine(0);
-	FastGradientDescent<WashtubTarget> fastGradientDescent(washtubTarget, _stepLimit, _targetAccuracy, _param, _useHessian);
+	FastGradientDescent<WashtubTarget> fastGradientDescent(washtubTarget, _stepLimit, _targetAccuracy, _param, _useGradientHessian);
 	RungeKutta<FastGradientDescent<WashtubTarget>, PythonMultyOutput> rungeKutta0(fastGradientDescent, pythonMultyOutput, _h);
 	rungeKutta0.solve(initialData);
 
 	pythonMultyOutput.setCurrentLine(1);
-	HeavyBall<WashtubTarget> heavyBall(washtubTarget, _stepLimit, _targetAccuracy, _param, _useHessian);
+	HeavyBall<WashtubTarget> heavyBall(washtubTarget, _stepLimit, _targetAccuracy, _param, _useHavyBallHessian);
 	RungeKutta<HeavyBall<WashtubTarget>, PythonMultyOutput> rungeKutta1(heavyBall, pythonMultyOutput, _h);
 	rungeKutta1.solve(initialData);
 
 	pythonMultyOutput.setCurrentLine(2);
-	RelativicHeavyBall<WashtubTarget> relativicHeavyBall(washtubTarget, _stepLimit, _targetAccuracy, _param, _lightSpeed, _useHessian);
+	RelativicHeavyBall<WashtubTarget> relativicHeavyBall(washtubTarget, _stepLimit, _targetAccuracy, _param, _lightSpeed, _useHavyBallHessian);
 	RungeKutta<RelativicHeavyBall<WashtubTarget>, PythonMultyOutput> rungeKutta2(relativicHeavyBall, pythonMultyOutput, _h);
 	rungeKutta2.solve(initialData);
 
 	pythonMultyOutput.setCurrentLine(3);
-	PseudoRelativicHeavyBall<WashtubTarget> pseudoRelativicHeavyBall(washtubTarget, _stepLimit, _targetAccuracy, _param, _lightSpeed, _useHessian);
+	PseudoRelativicHeavyBall<WashtubTarget> pseudoRelativicHeavyBall(washtubTarget, _stepLimit, _targetAccuracy, _param, _lightSpeed, _useHavyBallHessian);
 	RungeKutta<PseudoRelativicHeavyBall<WashtubTarget>, PythonMultyOutput> rungeKutta3(pseudoRelativicHeavyBall, pythonMultyOutput, _h);
 	rungeKutta3.solve(initialData);
 	
@@ -204,7 +207,8 @@ PythonMultyOutput::DataPoints* quadraticFormMulty(
 	const double _targetAccuracy,
 	const double _param,
 	const double _lightSpeed,
-	const bool _useHessian,
+	const bool _useGradientHessian,
+	const bool _useHavyBallHessian,
 	const double _h)
 {
 	PythonMultyOutput pythonMultyOutput(multyDataPoints, 4);
@@ -217,22 +221,22 @@ PythonMultyOutput::DataPoints* quadraticFormMulty(
 	std::vector<double> initialData{ _xStart, _yStart, _xSpeedStart, _ySpeedStart };
 
 	pythonMultyOutput.setCurrentLine(0);
-	FastGradientDescent<QuadraticForm> fastGradientDescent(quadraticForm, _stepLimit, _targetAccuracy, _param, _useHessian);
+	FastGradientDescent<QuadraticForm> fastGradientDescent(quadraticForm, _stepLimit, _targetAccuracy, _param, _useGradientHessian);
 	RungeKutta<FastGradientDescent<QuadraticForm>, PythonMultyOutput> rungeKutta0(fastGradientDescent, pythonMultyOutput, _h);
 	rungeKutta0.solve(initialData);
 
 	pythonMultyOutput.setCurrentLine(1);
-	HeavyBall<QuadraticForm> heavyBall(quadraticForm, _stepLimit, _targetAccuracy, _param, _useHessian);
+	HeavyBall<QuadraticForm> heavyBall(quadraticForm, _stepLimit, _targetAccuracy, _param, _useHavyBallHessian);
 	RungeKutta<HeavyBall<QuadraticForm>, PythonMultyOutput> rungeKutta1(heavyBall, pythonMultyOutput, _h);
 	rungeKutta1.solve(initialData);
 
 	pythonMultyOutput.setCurrentLine(2);
-	RelativicHeavyBall<QuadraticForm> relativicHeavyBall(quadraticForm, _stepLimit, _targetAccuracy, _param, _lightSpeed, _useHessian);
+	RelativicHeavyBall<QuadraticForm> relativicHeavyBall(quadraticForm, _stepLimit, _targetAccuracy, _param, _lightSpeed, _useHavyBallHessian);
 	RungeKutta<RelativicHeavyBall<QuadraticForm>, PythonMultyOutput> rungeKutta2(relativicHeavyBall, pythonMultyOutput, _h);
 	rungeKutta2.solve(initialData);
 
 	pythonMultyOutput.setCurrentLine(3);
-	PseudoRelativicHeavyBall<QuadraticForm> pseudoRelativicHeavyBall(quadraticForm, _stepLimit, _targetAccuracy, _param, _lightSpeed, _useHessian);
+	PseudoRelativicHeavyBall<QuadraticForm> pseudoRelativicHeavyBall(quadraticForm, _stepLimit, _targetAccuracy, _param, _lightSpeed, _useHavyBallHessian);
 	RungeKutta<PseudoRelativicHeavyBall<QuadraticForm>, PythonMultyOutput> rungeKutta3(pseudoRelativicHeavyBall, pythonMultyOutput, _h);
 	rungeKutta3.solve(initialData);
 	
@@ -250,7 +254,8 @@ PythonMultyOutput::DataPoints* logisticRegressionMulty(
 	const double _targetAccuracy,
 	const double _param,
 	const double _lightSpeed,
-	const bool _useHessian,
+	const bool _useGradientHessian,
+	const bool _useHavyBallHessian,
 	const double _h)
 {
 	std::list<std::vector<double>>
@@ -322,7 +327,7 @@ PythonMultyOutput::DataPoints* logisticRegressionMulty(
 	std::vector<double> initialData{ 0, _xStart, _yStart, 0, _xSpeedStart, _ySpeedStart };
 
 	pythonMultyOutput.setCurrentLine(0);
-	FastGradientDescent<LogisticRegressionTarget> fastGradientDescent(lrTarget, _stepLimit, _targetAccuracy, _param, _useHessian);
+	FastGradientDescent<LogisticRegressionTarget> fastGradientDescent(lrTarget, _stepLimit, _targetAccuracy, _param, _useGradientHessian);
 	RungeKutta<FastGradientDescent<LogisticRegressionTarget>, PythonMultyOutput> rungeKutta0(fastGradientDescent, pythonMultyOutput, _h);
 	std::vector<double> result0 = rungeKutta0.solve(initialData);
 	logisticRegressionData.lineAParameters[0] = result0[1];
@@ -330,7 +335,7 @@ PythonMultyOutput::DataPoints* logisticRegressionMulty(
 	logisticRegressionData.lineCParameters[0] = result0[0];
 
 	pythonMultyOutput.setCurrentLine(1);
-	HeavyBall<LogisticRegressionTarget> heavyBall(lrTarget, _stepLimit, _targetAccuracy, _param, _useHessian);
+	HeavyBall<LogisticRegressionTarget> heavyBall(lrTarget, _stepLimit, _targetAccuracy, _param, _useHavyBallHessian);
 	RungeKutta<HeavyBall<LogisticRegressionTarget>, PythonMultyOutput> rungeKutta1(heavyBall, pythonMultyOutput, _h);
 	std::vector<double> result1 = rungeKutta1.solve(initialData);
 	logisticRegressionData.lineAParameters[1] = result1[1];
@@ -338,7 +343,7 @@ PythonMultyOutput::DataPoints* logisticRegressionMulty(
 	logisticRegressionData.lineCParameters[1] = result1[0];
 
 	pythonMultyOutput.setCurrentLine(2);
-	PseudoRelativicHeavyBall<LogisticRegressionTarget> pseudoRelativicHeavyBall(lrTarget, _stepLimit, _targetAccuracy, _param, _lightSpeed, _useHessian);
+	PseudoRelativicHeavyBall<LogisticRegressionTarget> pseudoRelativicHeavyBall(lrTarget, _stepLimit, _targetAccuracy, _param, _lightSpeed, _useHavyBallHessian);
 	RungeKutta<PseudoRelativicHeavyBall<LogisticRegressionTarget>, PythonMultyOutput> rungeKutta2(pseudoRelativicHeavyBall, pythonMultyOutput, _h);
 	std::vector<double> result2 = rungeKutta2.solve(initialData);
 	logisticRegressionData.lineAParameters[2] = result2[1];
@@ -346,7 +351,7 @@ PythonMultyOutput::DataPoints* logisticRegressionMulty(
 	logisticRegressionData.lineCParameters[2] = result2[0];
 
 	pythonMultyOutput.setCurrentLine(3);
-	RelativicHeavyBall<LogisticRegressionTarget> relativicHeavyBall(lrTarget, _stepLimit, _targetAccuracy, _param, _lightSpeed, _useHessian);
+	RelativicHeavyBall<LogisticRegressionTarget> relativicHeavyBall(lrTarget, _stepLimit, _targetAccuracy, _param, _lightSpeed, _useHavyBallHessian);
 	RungeKutta<RelativicHeavyBall<LogisticRegressionTarget>, PythonMultyOutput> rungeKutta3(relativicHeavyBall, pythonMultyOutput, _h);
 	std::vector<double> result3 = rungeKutta3.solve(initialData);
 	logisticRegressionData.lineAParameters[3] = result3[1];
