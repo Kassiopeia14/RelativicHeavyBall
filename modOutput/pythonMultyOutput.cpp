@@ -70,7 +70,7 @@ void PythonMultyOutput::setDataPoints()
 	{
 		const size_t pointCount = xValuesLists_[n].size();
 
-		dataPoints_.pointCounts[n] = maxCount;
+		dataPoints_.pointCounts[n] = pointCount;
 
 		auto xValuesItem = xValuesLists_[n].begin();
 		auto yValuesItem = yValuesLists_[n].begin();
@@ -81,12 +81,6 @@ void PythonMultyOutput::setDataPoints()
 			dataPoints_.xValues[i] = *xValuesItem;
 			dataPoints_.yValues[i] = *yValuesItem;
 			dataPoints_.zValues[i] = *zValuesItem;
-		}
-		for (int k = i; k < (n + 1) * maxCount; k++, i++)
-		{
-			dataPoints_.xValues[k] = xValuesLists_[n].back();
-			dataPoints_.yValues[k] = yValuesLists_[n].back();
-			dataPoints_.zValues[k] = zValuesLists_[n].back();
-		}
+		}		
 	}
 }

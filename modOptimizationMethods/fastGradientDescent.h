@@ -56,7 +56,7 @@ public:
 			gradient(targetGradient(coordinates)),
 			result(_data.size());
 
-		double stepSize = param_;
+		double stepSize = 0.1;
 
 		if (useHessian_)
 		{
@@ -94,6 +94,9 @@ public:
 			return true;
 		}
 
+		return false;
+
+		/*
 		const size_t dimension = _newData.size() / 2;
 
 		std::vector<double>	coordinates(_newData.begin(), _newData.begin() + dimension);
@@ -101,6 +104,7 @@ public:
 		const double targetValue = target_.target(coordinates);
 
 		return (targetValue < targetAccuracy_);
+		*/
 	}
 
 private:

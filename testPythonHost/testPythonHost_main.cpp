@@ -28,7 +28,18 @@ void testPythonDLL()
     else cout << "error load Dll" << endl;
 }
 
-typedef PythonMultyOutput::DataPoints* (*WashtubMultyFunction)(double xStart, double yStart, double vXStart, double vYStart, int stepLimit, double accuracy, double a, double h, double c);
+typedef PythonMultyOutput::DataPoints* (*WashtubMultyFunction)(
+    double _xStart,
+    double _yStart,
+    double _xSpeedStart,
+    double _ySpeedStart,
+    const size_t _stepLimit,
+    const double _targetAccuracy,
+    const double _param,
+    const double _lightSpeed,
+    const bool _useGradientHessian,
+    const bool _useHavyBallHessian,
+    const double _h);
 
 void testWashtubMultyPythonDLL()
 {
@@ -38,13 +49,20 @@ void testWashtubMultyPythonDLL()
     {
         WashtubMultyFunction washtubMultyFunction = (WashtubMultyFunction)GetProcAddress(hModule, "washtubMulty");
 
-        PythonMultyOutput::DataPoints* dataPoints = (*washtubMultyFunction)(4, 3, 0, 0, 1000, 0.0001, 0.1, 0.1, 20);
+        PythonMultyOutput::DataPoints* dataPoints = (*washtubMultyFunction)(1, 0.5, 0, 0, 10000, 0.0001, 0.9, 0.5, true, true, 0.01);
 
-        for (int i = 0; i < dataPoints->pointCounts[0]; i++)
+        for (int k = 0; k < dataPoints->lineCount; k++)
         {
-            std::cout << i << ": " << dataPoints->xValues[i] << ", " << dataPoints->yValues[i] << " " << dataPoints->zValues[i] << std::endl;
+            for (int i = 0; i < dataPoints->pointCounts[k]; i++)
+            {
+                std::cout << i << ": " << dataPoints->xValues[i] << ", " << dataPoints->yValues[i] << " " << dataPoints->zValues[i] << std::endl;
+            }
         }
-
+        
+        for (int k = 0; k < dataPoints->lineCount; k++)
+        {
+            std::cout << "line " << k << ", " << dataPoints->pointCounts[k] << " points" << std::endl;
+        }
         ::FreeLibrary(hModule);
     }
     else cout << "error load Dll" << endl;
@@ -177,7 +195,7 @@ void testLogisticRegressionMultyPythonDLLNew()
 
 int main()
 {
-    testLogisticRegressionMultyPythonDLLNew();
+    testWashtubMultyPythonDLL();
 
     return 0;
 }

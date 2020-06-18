@@ -4,7 +4,8 @@ double NormTarget::target(std::vector<double> _coordinates)
 {
 	double result = 0;
 
-	for (auto coordinateItem = _coordinates.begin(); coordinateItem != _coordinates.end(); coordinateItem++)
+	int i = 0;
+	for (auto coordinateItem = _coordinates.begin(); coordinateItem != _coordinates.end(); coordinateItem++, i++)
 	{
 		result += *coordinateItem * *coordinateItem;
 	}
@@ -17,8 +18,9 @@ std::vector<double> NormTarget::gradient(std::vector<double> _coordinates)
 	std::vector<double> result(_coordinates.size());
 
 	auto coordinateItem = _coordinates.begin();
-
-	for (auto resultItem = result.begin(); resultItem != result.end(); resultItem++, coordinateItem++)
+	
+	int i = 0;
+	for (auto resultItem = result.begin(); resultItem != result.end(); resultItem++, coordinateItem++, i++)
 	{
 		*resultItem = 2 * *coordinateItem;
 	}

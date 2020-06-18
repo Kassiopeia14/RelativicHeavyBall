@@ -58,7 +58,9 @@ public:
 			gradient(targetGradient(coordinates)),
 			result(_data.size());
 		
-		double stepSize = 1;
+		const double gradientNorm = norm(gradient);
+
+		double stepSize = 1;// 1 / (1 + gradientNorm * gradientNorm);
 
 		if (useHessian_)
 		{
@@ -66,11 +68,9 @@ public:
 
 			std::vector<double> transformedGradient = targetGessian * gradient;
 
-			const double
-				dotProduct = transformedGradient * gradient,
-				gradientNorm = norm(gradient);
+			const double dotProduct = transformedGradient * gradient;
 
-			stepSize = gradientNorm * gradientNorm / dotProduct;
+			stepSize = stepSize * gradientNorm * gradientNorm / dotProduct;
 		}
 
 		const double
@@ -89,7 +89,7 @@ public:
 
 		for (auto velocityItem = velocities.begin(); velocityItem != velocities.end(); velocityItem++, gradientItem++, resultItem++)
 		{
-			*resultItem = param_ * (- *velocityItem - stepSize * *gradientItem);
+			*resultItem = -param_ * *velocityItem - stepSize * *gradientItem;
 		}
 
 		return result;
@@ -101,7 +101,10 @@ public:
 		{
 			return true;
 		}
-
+		
+		return false;
+		
+		/*
 		const size_t dimension = _newData.size() / 2;
 
 		std::vector<double>	coordinates(_newData.begin(), _newData.begin() + dimension);
@@ -109,6 +112,7 @@ public:
 		const double targetValue = target_.target(coordinates);
 
 		return (targetValue < targetAccuracy_);
+		*/
 	}
 
 private:
